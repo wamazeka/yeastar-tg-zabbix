@@ -11,3 +11,4 @@ For XML template add balance check & graphs for RU GSM operators.
 1. Add `yeastar-discovery.sh` in  `/usr/lib/zabbix/externalscripts/` 
 2. Import `yeastar-zabbix-template.xml` in Zabbix
 3. Add template to host
+4. Add macros {$TGAPI.PASS} and {$TGAPI.USER} to host
