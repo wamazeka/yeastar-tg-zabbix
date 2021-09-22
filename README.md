@@ -1,5 +1,5 @@
 # yeastar-zabbix
-Template for monitoring SIM's in Yeastar TG gateways and balance checking on RU operators
+Template for monitoring SIM's in Yeastar TG-series (TG200, TG400, TG800, TG1600) gateways and balance checking on RU operators
 
 Main script and ideas from [@AcidVenom](https://gist.github.com/andrewmagaz)
 More about in [article](https://habr.com/ru/post/454702/) on Habr
@@ -12,7 +12,7 @@ For XML template add balance check & graphs for RU GSM operators.
 - Статус сим-карты в шлюзе (зарегистрирована, ошибка),
 - Настройки регистрации в сети (смс-центр, оператор, роуминг, IMSI),
 - Качество связи (уровень сигнала)
-- Баланс средств на сим-карте (только для 4 российских операторов и 2 ревизии железа)
+- Баланс средств на сим-карте (только для 4 российских операторов и второй ревизии железа)
 
 ## Как работает:
 После создания узла сети в Zabbix начинается мониторинг оборудования через ICMP пинг. 
