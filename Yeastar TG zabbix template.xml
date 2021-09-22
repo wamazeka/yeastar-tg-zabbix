@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.4</version>
+    <date>2021-09-22T14:29:34Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Yeastar TG</template>
+            <name>Yeastar TG</name>
+            <description>Template for monitoring GSM gateways Yeastar TG-series in Zabbix and balance checking on RU operators
+For using set macros {$TGAPI.PASS} and {$TGAPI.USER} to host 
+Required yeastar-discovery.sh in external scripts folder
+For balance checking add {$TGAPI.IP} to host</description>
+            <templates>
+                <template>
+                    <name>ICMP Ping</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>SIM-cards</name>
+                    <type>EXTERNAL</type>
+                    <key>yeastar-discovery.sh[discovery,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                    <delay>1h</delay>
+                    <filter>
+                        <evaltype>AND</evaltype>
+                        <conditions>
+                            <condition>
+                                <macro>{#POWER}</macro>
+                                <value>Power on</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                            <condition>
+                                <macro>{#STATUS}</macro>
+                                <value>Undetected SIM Card</value>
+                                <operator>NOT_MATCHES_REGEX</operator>
+                                <formulaid>B</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>3d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>SIM{#NUM} - IMSI</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.imsi[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>SIM IMSI: (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - Последнее событие</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.last[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>Last event: (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - Статус сети</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.networkstatus[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>Network Status: (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - Оператор</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.operator[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>Network Name: (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - Уровень сигнала</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.signal[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>30d</trends>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>Signal Quality \(0,31\): (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>avg(/Yeastar TG/hardware.yeastar.sim.signal[{#ID}],#3)&lt;9</expression>
+                                    <name>Плохой сигнал сети SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>INFO</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - SMS-центр</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.smscenter[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>SIM SMS Center Number: (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>find(/Yeastar TG/hardware.yeastar.sim.smscenter[{#ID}],#2,&quot;regexp&quot;,&quot;.*&quot;)=0</expression>
+                                    <name>Ошибка SMS-центра SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - Состояние</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.state[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>State: (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>find(/Yeastar TG/hardware.yeastar.sim.state[{#ID}],#2,&quot;regexp&quot;,&quot;SIM PIN REQ&quot;)=1</expression>
+                                    <name>Ошибка PIN на SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - Статус</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.status[{#ID}]</key>
+                            <delay>0</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <value_type>CHAR</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>Status: .*, (.*), .*, .*</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>find(/Yeastar TG/hardware.yeastar.sim.status[{#ID}],,&quot;regexp&quot;,&quot;Undetected SIM Card&quot;)=1</expression>
+                                    <name>Изъята SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>AVERAGE</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>find(/Yeastar TG/hardware.yeastar.sim.status[{#ID}],#2,&quot;regexp&quot;,&quot;Down&quot;)=1</expression>
+                                    <name>Плохой статус SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - Balance</name>
+                            <type>EXTERNAL</type>
+                            <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
+                            <delay>6h</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>руб.</units>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>SIM SMS Center Number: (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>sms_center_num = value;
+balance_ussds = {
+	'+79037011111': '%23102%23',	// Beeline
+	'+79262909090': '%23100%23',	// Megafon
+	'+79043490000': '%23105%23',	// Tele2
+	'+79168999100': '%23100%23'	// MTS
+};
+user = '{$TGAPI.USER}';
+pass = '{$TGAPI.PASS}';
+port = '{#NUM}';
+ussd = balance_ussds[sms_center_num];
+url = 'http://{$TGAPI.IP}/cgi/WebCGI?1500102=account='+user+'&amp;password='+pass+'&amp;port='+port+'&amp;content='+ussd;
+Zabbix.Log(3, 'url '+ url);
+req = new CurlHttpRequest();
+resp = req.Get(url);
+return resp</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>-?\d{1,}[\,\.]\d{1,2}</parameter>
+                                        <parameter>\0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>,</parameter>
+                                        <parameter>.</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Balance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;100</expression>
+                                    <name>Баланс ниже 100р SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;15</expression>
+                                    <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>change(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&gt;30</expression>
+                                    <recovery_mode>NONE</recovery_mode>
+                                    <name>Большой расход средств SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>WARNING</priority>
+                                    <description>Возможно, на сим-карте активна платная услуга</description>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SIM{#NUM} - Parsing</name>
+                            <type>EXTERNAL</type>
+                            <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            <delay>15m</delay>
+                            <history>1h</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>(last(/Yeastar TG/hardware.yeastar.sim.imsi[{#ID}],#1)&lt;&gt;last(/Yeastar TG/hardware.yeastar.sim.imsi[{#ID}],#2))=1 and find(/Yeastar TG/hardware.yeastar.sim.status[{#ID}],,&quot;regexp&quot;,&quot;Undetected SIM Card&quot;)=0</expression>
+                            <name>Вставлена новая SIM{#NUM} на {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>Баланс SIM{#NUM}</name>
+                            <ymin_item_1>
+                                <host>Yeastar TG</host>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
+                            </ymin_item_1>
+                            <graph_items>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>BOLD_LINE</drawtype>
+                                    <color>1A7C11</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Yeastar TG</host>
+                                        <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>Уровень сигнала SIM{#NUM}</name>
+                            <graph_items>
+                                <graph_item>
+                                    <drawtype>BOLD_LINE</drawtype>
+                                    <color>1A7C11</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Yeastar TG</host>
+                                        <key>hardware.yeastar.sim.signal[{#ID}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
