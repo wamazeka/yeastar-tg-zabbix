@@ -9,15 +9,16 @@
     </groups>
     <templates>
         <template>
+            <uuid>df29fa043f0d45b180d3263b6afdb0b3</uuid>
             <template>Yeastar TG</template>
             <name>Yeastar TG</name>
             <description>Template for monitoring GSM gateways Yeastar TG-series in Zabbix and balance checking on RU operators
 For using set macros {$TGAPI.PASS} and {$TGAPI.USER} to host 
-Required yeastar-discovery.sh in external scripts folder
+Required yeastar-discovery.sh
 For balance checking add {$TGAPI.IP} to host</description>
             <templates>
                 <template>
-                    <name>ICMP Ping</name>
+                    <name>Template Module ICMP Ping</name>
                 </template>
             </templates>
             <groups>
@@ -27,6 +28,7 @@ For balance checking add {$TGAPI.IP} to host</description>
             </groups>
             <discovery_rules>
                 <discovery_rule>
+                    <uuid>7abac5f6812248129ed9b405b0edfe67</uuid>
                     <name>SIM-cards</name>
                     <type>EXTERNAL</type>
                     <key>yeastar-discovery.sh[discovery,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
@@ -50,6 +52,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                     <lifetime>3d</lifetime>
                     <item_prototypes>
                         <item_prototype>
+                            <uuid>a8fce06c44214ea2b4f7253a1605b32b</uuid>
                             <name>SIM{#NUM} - IMSI</name>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.imsi[{#ID}]</key>
@@ -77,6 +80,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>3c182b3037f348609761d7196f36d088</uuid>
                             <name>SIM{#NUM} - Последнее событие</name>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.last[{#ID}]</key>
@@ -104,11 +108,12 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>7c649f2002114dfababf8e0bc60d1676</uuid>
                             <name>SIM{#NUM} - Статус сети</name>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.networkstatus[{#ID}]</key>
                             <delay>0</delay>
-                            <history>7d</history>
+                            <history>30d</history>
                             <trends>0</trends>
                             <value_type>CHAR</value_type>
                             <preprocessing>
@@ -129,8 +134,17 @@ For balance checking add {$TGAPI.IP} to host</description>
                                     <value>SIM</value>
                                 </tag>
                             </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>64e2c171d1994f398b36da2dfd45e485</uuid>
+                                    <expression>find(/Yeastar TG/hardware.yeastar.sim.networkstatus[{#ID}],1h,&quot;regexp&quot;,&quot;Registered&quot;)=0</expression>
+                                    <name>Потеряна сеть SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>73a9f9859cbb4356b50a87d7a1b02986</uuid>
                             <name>SIM{#NUM} - Оператор</name>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.operator[{#ID}]</key>
@@ -158,6 +172,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>5d22f2206e6d4c08872e808f50de017d</uuid>
                             <name>SIM{#NUM} - Уровень сигнала</name>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.signal[{#ID}]</key>
@@ -184,7 +199,8 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>avg(/Yeastar TG/hardware.yeastar.sim.signal[{#ID}],#3)&lt;9</expression>
+                                    <uuid>ed1dbc06c68249d5956b05194e4464e5</uuid>
+                                    <expression>avg(/Yeastar TG/hardware.yeastar.sim.signal[{#ID}],#3)&lt;8</expression>
                                     <name>Плохой сигнал сети SIM{#NUM} на {HOST.NAME}</name>
                                     <priority>INFO</priority>
                                     <manual_close>YES</manual_close>
@@ -192,6 +208,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>273928013cfa4d429f22daa52994f689</uuid>
                             <name>SIM{#NUM} - SMS-центр</name>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.smscenter[{#ID}]</key>
@@ -219,6 +236,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
+                                    <uuid>d3d13e5601834f47bb30e6407e750334</uuid>
                                     <expression>find(/Yeastar TG/hardware.yeastar.sim.smscenter[{#ID}],#2,&quot;regexp&quot;,&quot;.*&quot;)=0</expression>
                                     <name>Ошибка SMS-центра SIM{#NUM} на {HOST.NAME}</name>
                                     <priority>WARNING</priority>
@@ -227,6 +245,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>9db1c1e70f2f4223accccbf3d0fbf6ff</uuid>
                             <name>SIM{#NUM} - Состояние</name>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.state[{#ID}]</key>
@@ -254,6 +273,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
+                                    <uuid>238cb7cae6284902b32a0e659457b4ea</uuid>
                                     <expression>find(/Yeastar TG/hardware.yeastar.sim.state[{#ID}],#2,&quot;regexp&quot;,&quot;SIM PIN REQ&quot;)=1</expression>
                                     <name>Ошибка PIN на SIM{#NUM} на {HOST.NAME}</name>
                                     <priority>AVERAGE</priority>
@@ -261,11 +281,12 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>b92d77d0cb2640a19ec8d247eea30329</uuid>
                             <name>SIM{#NUM} - Статус</name>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.status[{#ID}]</key>
                             <delay>0</delay>
-                            <history>7d</history>
+                            <history>30d</history>
                             <trends>0</trends>
                             <value_type>CHAR</value_type>
                             <preprocessing>
@@ -288,23 +309,78 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
+                                    <uuid>c0b29690574a4c8c9bb799a554989b04</uuid>
                                     <expression>find(/Yeastar TG/hardware.yeastar.sim.status[{#ID}],,&quot;regexp&quot;,&quot;Undetected SIM Card&quot;)=1</expression>
                                     <name>Изъята SIM{#NUM} на {HOST.NAME}</name>
                                     <priority>AVERAGE</priority>
                                     <manual_close>YES</manual_close>
                                 </trigger_prototype>
                                 <trigger_prototype>
-                                    <expression>find(/Yeastar TG/hardware.yeastar.sim.status[{#ID}],#2,&quot;regexp&quot;,&quot;Down&quot;)=1</expression>
+                                    <uuid>05513f926fd64493b882a1c75d75e6c4</uuid>
+                                    <expression>find(/Yeastar TG/hardware.yeastar.sim.status[{#ID}],2h,&quot;regexp&quot;,&quot;Provisioned&quot;)=0 and find(/Yeastar TG/hardware.yeastar.sim.status[{#ID}],2h,&quot;regexp&quot;,&quot;Up&quot;)=0</expression>
                                     <name>Плохой статус SIM{#NUM} на {HOST.NAME}</name>
                                     <priority>HIGH</priority>
+                                    <description>либо Provisioned, либо Up (для 3 версии шлюзов)</description>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>6dfdc91268bd4adcbd5c360e639e8ada</uuid>
+                            <name>SIM{#NUM} - Summon external SMS</name>
+                            <type>EXTERNAL</type>
+                            <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance2]</key>
+                            <delay>0;h22</delay>
+                            <history>30d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>SIM SMS Center Number: (.*)</parameter>
+                                        <parameter>\1</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>sms_center_num = value;
+
+balance_ussds = {
+	'+79037011111': '%2A110%2A05%23',	// Beeline
+	'+79262909090': '%2A123%23',	// Megafon
+	'+79043490000': '%2A107%23',	// Tele2
+	'+79168999100': '%2A217%23'	// MTS
+};
+
+user = '{$TGAPI.USER}';
+pass = '{$TGAPI.PASS}';
+port = '{#NUM}';
+ussd = balance_ussds[sms_center_num];
+
+url = 'http://{$TGAPI.IP}/cgi/WebCGI?1500102=account='+user+'&amp;password='+pass+'&amp;port='+port+'&amp;content='+ussd;
+Zabbix.Log(3, 'url'+ url);
+
+req = new CurlHttpRequest();
+resp = req.Get(url);
+
+return resp</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SIM</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>2816c637167543e6b074337d692aaa92</uuid>
                             <name>SIM{#NUM} - Balance</name>
                             <type>EXTERNAL</type>
                             <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
-                            <delay>6h</delay>
+                            <delay>8h</delay>
                             <value_type>FLOAT</value_type>
                             <units>руб.</units>
                             <preprocessing>
@@ -319,27 +395,32 @@ For balance checking add {$TGAPI.IP} to host</description>
                                     <type>JAVASCRIPT</type>
                                     <parameters>
                                         <parameter>sms_center_num = value;
+
 balance_ussds = {
 	'+79037011111': '%23102%23',	// Beeline
 	'+79262909090': '%23100%23',	// Megafon
 	'+79043490000': '%23105%23',	// Tele2
 	'+79168999100': '%23100%23'	// MTS
 };
+
 user = '{$TGAPI.USER}';
 pass = '{$TGAPI.PASS}';
 port = '{#NUM}';
 ussd = balance_ussds[sms_center_num];
+
 url = 'http://{$TGAPI.IP}/cgi/WebCGI?1500102=account='+user+'&amp;password='+pass+'&amp;port='+port+'&amp;content='+ussd;
-Zabbix.Log(3, 'url '+ url);
+Zabbix.Log(3, 'url'+ url);
+
 req = new CurlHttpRequest();
 resp = req.Get(url);
+
 return resp</parameter>
                                     </parameters>
                                 </step>
                                 <step>
                                     <type>REGEX</type>
                                     <parameters>
-                                        <parameter>-?\d{1,}[\,\.]\d{1,2}</parameter>
+                                        <parameter>-?\d{1,4}[\,\.]\d{1,2}|\d{1,4}r</parameter>
                                         <parameter>\0</parameter>
                                     </parameters>
                                 </step>
@@ -348,6 +429,20 @@ return resp</parameter>
                                     <parameters>
                                         <parameter>,</parameter>
                                         <parameter>.</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>r</parameter>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>Минус: </parameter>
+                                        <parameter>-</parameter>
                                     </parameters>
                                 </step>
                             </preprocessing>
@@ -359,31 +454,53 @@ return resp</parameter>
                             </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
+                                    <uuid>6a287535db454c83a64c23322fa042c0</uuid>
                                     <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;100</expression>
                                     <name>Баланс ниже 100р SIM{#NUM} на {HOST.NAME}</name>
-                                    <priority>WARNING</priority>
+                                    <priority>INFO</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
+                                            <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;15</expression>
+                                        </dependency>
+                                    </dependencies>
                                 </trigger_prototype>
                                 <trigger_prototype>
-                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;15</expression>
-                                    <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
+                                    <uuid>f708aef9fce14470a1f0df0ce7f6f559</uuid>
+                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;0</expression>
+                                    <name>Баланс ниже нуля SIM{#NUM} на {HOST.NAME}</name>
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                                 <trigger_prototype>
+                                    <uuid>4b572f047caf4e889521374c23eb5e2f</uuid>
+                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;15</expression>
+                                    <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>WARNING</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>Баланс ниже нуля SIM{#NUM} на {HOST.NAME}</name>
+                                            <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;0</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>07843eb4e44048758d080a4c36e21dba</uuid>
                                     <expression>change(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&gt;30</expression>
                                     <recovery_mode>NONE</recovery_mode>
                                     <name>Большой расход средств SIM{#NUM} на {HOST.NAME}</name>
-                                    <priority>WARNING</priority>
+                                    <priority>INFO</priority>
                                     <description>Возможно, на сим-карте активна платная услуга</description>
                                     <manual_close>YES</manual_close>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>ca2f1974f6fc4ff48c490453e073d963</uuid>
                             <name>SIM{#NUM} - Parsing</name>
                             <type>EXTERNAL</type>
                             <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
-                            <delay>15m</delay>
-                            <history>1h</history>
+                            <delay>10m</delay>
+                            <history>3h</history>
                             <trends>0</trends>
                             <value_type>TEXT</value_type>
                             <tags>
@@ -396,6 +513,7 @@ return resp</parameter>
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
+                            <uuid>0c89ed28da3f49648bae130451a915ad</uuid>
                             <expression>(last(/Yeastar TG/hardware.yeastar.sim.imsi[{#ID}],#1)&lt;&gt;last(/Yeastar TG/hardware.yeastar.sim.imsi[{#ID}],#2))=1 and find(/Yeastar TG/hardware.yeastar.sim.status[{#ID}],,&quot;regexp&quot;,&quot;Undetected SIM Card&quot;)=0</expression>
                             <name>Вставлена новая SIM{#NUM} на {HOST.NAME}</name>
                             <priority>WARNING</priority>
@@ -404,6 +522,7 @@ return resp</parameter>
                     </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
+                            <uuid>1269dbfe69dc450e954a14710f5383e5</uuid>
                             <name>Баланс SIM{#NUM}</name>
                             <ymin_item_1>
                                 <host>Yeastar TG</host>
@@ -423,6 +542,7 @@ return resp</parameter>
                             </graph_items>
                         </graph_prototype>
                         <graph_prototype>
+                            <uuid>3b02d0aec9914b04aaf0ed774c9704ed</uuid>
                             <name>Уровень сигнала SIM{#NUM}</name>
                             <graph_items>
                                 <graph_item>
