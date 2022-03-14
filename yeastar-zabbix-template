@@ -32,7 +32,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                     <name>SIM-cards</name>
                     <type>EXTERNAL</type>
                     <key>yeastar-discovery.sh[discovery,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
-                    <delay>1h</delay>
+                    <delay>30m</delay>
                     <filter>
                         <evaltype>AND</evaltype>
                         <conditions>
@@ -49,7 +49,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </condition>
                         </conditions>
                     </filter>
-                    <lifetime>3d</lifetime>
+                    <lifetime>1d</lifetime>
                     <item_prototypes>
                         <item_prototype>
                             <uuid>a8fce06c44214ea2b4f7253a1605b32b</uuid>
