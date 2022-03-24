@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>5.4</version>
-    <date>2021-09-22T14:29:34Z</date>
+    <version>6.0</version>
+    <date>2022-03-24T10:19:47Z</date>
     <groups>
         <group>
+            <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
             <name>Templates</name>
         </group>
     </groups>
@@ -399,8 +400,10 @@ return resp</parameter>
 balance_ussds = {
 	'+79037011111': '%23102%23',	// Beeline
 	'+79262909090': '%23100%23',	// Megafon
+	'+79219909090': '*100%23',	// Megafon2
 	'+79043490000': '%23105%23',	// Tele2
-	'+79168999100': '%23100%23'	// MTS
+	'+79168999100': '%23100%23',	// MTS
+        '+79112009993': '%23100%23'	// MTS2
 };
 
 user = '{$TGAPI.USER}';
@@ -485,12 +488,20 @@ return resp</parameter>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>07843eb4e44048758d080a4c36e21dba</uuid>
-                                    <expression>change(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&gt;30</expression>
+                                    <expression>change(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;-10</expression>
                                     <recovery_mode>NONE</recovery_mode>
                                     <name>Большой расход средств SIM{#NUM} на {HOST.NAME}</name>
                                     <priority>INFO</priority>
                                     <description>Возможно, на сим-карте активна платная услуга</description>
                                     <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>67ae71a4ae2d4a9d9a98eb1201b6895f</uuid>
+                                    <expression>countunique(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance],15d)=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>countunique(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance],15d)&gt;1</recovery_expression>
+                                    <name>Не меняется баланс SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>WARNING</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
