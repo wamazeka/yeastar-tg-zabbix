@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.0</version>
-    <date>2022-03-24T10:19:47Z</date>
+    <date>2022-03-30T10:20:26Z</date>
     <groups>
         <group>
             <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
@@ -421,9 +421,44 @@ return resp</parameter>
                                     </parameters>
                                 </step>
                                 <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter><![CDATA[ ]]></parameter>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>Минус: </parameter>
+                                        <parameter>-</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>Minus:</parameter>
+                                        <parameter>-</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>р</parameter>
+                                        <parameter>r</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>р</parameter>
+                                        <parameter>r</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
                                     <type>REGEX</type>
                                     <parameters>
-                                        <parameter>-?\d{1,4}[\,\.]\d{1,2}|\d{1,4}r</parameter>
+                                        <parameter>-?\d+[\,\.]\d+|-?\d+r</parameter>
                                         <parameter>\0</parameter>
                                     </parameters>
                                 </step>
@@ -439,13 +474,6 @@ return resp</parameter>
                                     <parameters>
                                         <parameter>r</parameter>
                                         <parameter/>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>STR_REPLACE</type>
-                                    <parameters>
-                                        <parameter>Минус: </parameter>
-                                        <parameter>-</parameter>
                                     </parameters>
                                 </step>
                             </preprocessing>
