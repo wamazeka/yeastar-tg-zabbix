@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.0</version>
-    <date>2022-03-30T10:20:26Z</date>
+    <date>2022-05-30T13:13:14Z</date>
     <groups>
         <group>
             <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
@@ -52,6 +52,57 @@ For balance checking add {$TGAPI.IP} to host</description>
                     </filter>
                     <lifetime>1d</lifetime>
                     <item_prototypes>
+                        <item_prototype>
+                            <uuid>fc70d2faf3ac412197b27a421e3e19ca</uuid>
+                            <name>SIM{#NUM} - Last spending</name>
+                            <type>DEPENDENT</type>
+                            <key>hardware.yeastar.sim.balance.change[{#ID}]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>руб.</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>-1</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>SIMPLE_CHANGE</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>IN_RANGE</type>
+                                    <parameters>
+                                        <parameter>0.001</parameter>
+                                        <parameter/>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Balance change</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>07843eb4e44048758d080a4c36e21dba</uuid>
+                                    <expression>percentile(/Yeastar TG/hardware.yeastar.sim.balance.change[{#ID}],1w,60)&gt;10</expression>
+                                    <recovery_mode>NONE</recovery_mode>
+                                    <name>Возможная подписка на SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>INFO</priority>
+                                    <description>Медиана больше 10ц рублей за месяц трат</description>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
                         <item_prototype>
                             <uuid>a8fce06c44214ea2b4f7253a1605b32b</uuid>
                             <name>SIM{#NUM} - IMSI</name>
@@ -178,8 +229,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                             <type>DEPENDENT</type>
                             <key>hardware.yeastar.sim.signal[{#ID}]</key>
                             <delay>0</delay>
-                            <history>7d</history>
-                            <trends>30d</trends>
+                            <trends>180d</trends>
                             <preprocessing>
                                 <step>
                                     <type>REGEX</type>
@@ -488,7 +538,8 @@ return resp</parameter>
                                     <uuid>6a287535db454c83a64c23322fa042c0</uuid>
                                     <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;100</expression>
                                     <name>Баланс ниже 100р SIM{#NUM} на {HOST.NAME}</name>
-                                    <priority>INFO</priority>
+                                    <opdata>{ITEM.LASTVALUE1}</opdata>
+                                    <priority>WARNING</priority>
                                     <dependencies>
                                         <dependency>
                                             <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
@@ -500,28 +551,21 @@ return resp</parameter>
                                     <uuid>f708aef9fce14470a1f0df0ce7f6f559</uuid>
                                     <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;0</expression>
                                     <name>Баланс ниже нуля SIM{#NUM} на {HOST.NAME}</name>
-                                    <priority>AVERAGE</priority>
+                                    <opdata>{ITEM.LASTVALUE1}</opdata>
+                                    <priority>HIGH</priority>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>4b572f047caf4e889521374c23eb5e2f</uuid>
                                     <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;15</expression>
                                     <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
-                                    <priority>WARNING</priority>
+                                    <opdata>{ITEM.LASTVALUE1}</opdata>
+                                    <priority>AVERAGE</priority>
                                     <dependencies>
                                         <dependency>
                                             <name>Баланс ниже нуля SIM{#NUM} на {HOST.NAME}</name>
                                             <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;0</expression>
                                         </dependency>
                                     </dependencies>
-                                </trigger_prototype>
-                                <trigger_prototype>
-                                    <uuid>07843eb4e44048758d080a4c36e21dba</uuid>
-                                    <expression>change(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;-10</expression>
-                                    <recovery_mode>NONE</recovery_mode>
-                                    <name>Большой расход средств SIM{#NUM} на {HOST.NAME}</name>
-                                    <priority>INFO</priority>
-                                    <description>Возможно, на сим-карте активна платная услуга</description>
-                                    <manual_close>YES</manual_close>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>67ae71a4ae2d4a9d9a98eb1201b6895f</uuid>
