@@ -103,3 +103,12 @@ Message: Thanks for all the fish.
 
 
 *Including macros in macros not work for me in 5.4
+
+
+## To-Do
+- add trunk names and numbers to Zabbix autofinding. Do it with SSH script or SSH agent (zbx) with
+
+`sqlite3 -csv /persistent/var/lib/asterisk/db/MyPBX.sqlite "select * from gsmtrunk;"`
+
+- Rework all autoprovision. Creation elements with number and long history, maybe only with numbers, for passtrhough history when changing port\gateway?
+Think, should to do all in SH script, not in XML JS ZBX script
