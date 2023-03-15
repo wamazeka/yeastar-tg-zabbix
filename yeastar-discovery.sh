@@ -58,7 +58,7 @@ if [[ $1 = "balance" ]]; then
 	ussdresponce=$(echo -e "Action: Login\nUsername: $3\nSecret: $4\n\nAction: smscommand\nCommand: gsm send ussd $5 ${USSD["$smscenter"]} $7\n\nAction: Logoff\n\n" | nc $2 5038 | grep "USSD Message")
 
 	if [ ${#ussdresponce} -ge 100 ]; then
-		ussdresponce=$(echo $ussdresponce | xxd -r -p)
+		ussdresponce=$(echo $ussdresponce | xxd -r -p | tr -d '\0')
 	fi
 
 	# Uppercase for minus catching, delete all spaces, change comma to dot
