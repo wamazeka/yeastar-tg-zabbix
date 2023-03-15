@@ -62,12 +62,12 @@ if [[ $1 = "balance" ]]; then
 
 	# catch minus
 	ussdresponce=${ussdresponce//'MINUS'/'-'}
-	ussdresponce=${ussdresponce//'МИНУС'/'-'}
-	ussdresponce=${ussdresponce//'Р.'/''}
+	#ussdresponce=${ussdresponce//'МИНУС'/'-'} #russian non correct in proxmox , catch in template
+	#ussdresponce=${ussdresponce//'Р.'/''} #russian non correct in proxmox , catch in template
 	ussdresponce=${ussdresponce//'P.'/''}
 
 	# delete all spaces, all letters
-	ussdresponce=$(echo $ussdresponce | tr -d [:blank:] | tr -cd "1234567890.-")
+	# ussdresponce=$(echo $ussdresponce | tr -d [:blank:] | tr -cd "1234567890.-") # work in template
 
 	echo $ussdresponce
 fi
