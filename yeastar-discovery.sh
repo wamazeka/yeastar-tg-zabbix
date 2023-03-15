@@ -55,9 +55,12 @@ fi
 if [[ $1 = "balance" ]]; then
 	smscenter=$(echo -e "Action: Login\nUsername: $3\nSecret: $4\n\nAction: smscommand\nCommand: gsm show span $5\n\nAction: Logoff\n\n" | nc $2 5038 | grep 'SMS Center' | tr -d [:blank:] | tr -d [:alpha:] | tr -d :+)
 
-	ussdresponce=$(echo -e "Action: Login\nUsername: $3\nSecret: $4\n\nAction: smscommand\nCommand: gsm send ussd $5 ${USSD["$smscenter"]} $7\n\nAction: Logoff\n\n" | nc $2 5038 | grep "USSD Message")
+	ussdresponce=$(echo -e "Action: Login\nUsername: $3\nSecret: $4\n\nAction: smscommand\nCommand: gsm send ussd $5 ${USSD["$smscenter"]} $7\n\nAction: Logoff\n\n" | nc $2 5038 | grep "USSD Message" | cut -c16-)
 
-	if [ ${#ussdresponce} -ge 100 ]; then
+	try_ucs=$(echo $ussdresponce | xxd -r -p)
+	echo $try_ucs
+
+	if [ ${#try_ucs} -ge 5 ]; then
 		ussdresponce=$(echo $ussdresponce | xxd -r -p | tr -d '\0')
 	fi
 
