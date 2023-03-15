@@ -57,14 +57,17 @@ if [[ $1 = "balance" ]]; then
 
 	ussdresponce=$(echo -e "Action: Login\nUsername: $3\nSecret: $4\n\nAction: smscommand\nCommand: gsm send ussd $5 ${USSD["$smscenter"]} $7\n\nAction: Logoff\n\n" | nc $2 5038 | grep "USSD Message")
 
+	if [ ${#ussdresponce} -ge 100 ]; then
+		ussdresponce=$(echo $ussdresponce | xxd -r -p)
+	fi
+
 	# Uppercase for minus catching, delete all spaces, change comma to dot
 	ussdresponce=$(echo $ussdresponce | tr [:lower:] [:upper:] | tr -d [:blank:] | tr , . | tr -d :)
-
-	# catch minus
+	# catch eng minus
 	ussdresponce=${ussdresponce//'MINUS'/'-'}
+	ussdresponce=${ussdresponce//'P.'/''}
 	#ussdresponce=${ussdresponce//'МИНУС'/'-'} #russian non correct in proxmox , catch in template
 	#ussdresponce=${ussdresponce//'Р.'/''} #russian non correct in proxmox , catch in template
-	ussdresponce=${ussdresponce//'P.'/''}
 
 	# delete all spaces, all letters
 	# ussdresponce=$(echo $ussdresponce | tr -d [:blank:] | tr -cd "1234567890.-") # work in template
