@@ -1,6 +1,6 @@
 #!/bin/bash
 # 2019/05/24 AcidVenom v1.0
-# 2021/09/21 Wamazeka v1.1
+# 2023/03/15 Wamazeka v1.2
 # Script LLD-discovery SIM-cards via API Yeastar for Zabbix
 #
 # Parameters: $discovery_2_3_etc $IP $API.USER $API.PASS
@@ -31,11 +31,14 @@ if [[ $1 = "discovery" ]]; then
 	get=$(echo -e "Action: Login\nUsername: $3\nSecret: $4\n\nAction: smscommand\nCommand: gsm show spans\n\nAction: Logoff\n\n" | nc $2 5038 | grep "span [0-9]*:")
 
 	for pool in $get; do
-		id=$(echo $pool | sed "s/.* span //g" | sed "s/:.*//g")
-		# Examples:
+		# Examples for $pool:
 		# GSM span 2: Power on, Provisioned, Up, Active,Standard
 		# GSM span 7: Power on, Provisioned, Undetected SIM Card, Active,Standard
-		# So, for ID just crop after 'span' and before ':'
+		# So, for span_num(ID) just crop after 'span' and before ':'
+
+		#echo $pool
+		id=$(echo $pool | sed "s/.* span //g" | sed "s/:.*//g")
+		#echo $id
 
 		num=$(($id - 1))
 		power=$(echo $pool | grep "span [0-9]*:" | sed "s/.*: //g" | sed "s/,.*//g")
@@ -67,10 +70,12 @@ if [[ $1 = "balance" ]]; then
 	ussdresponce=$(echo $ussdresponce | tr -d [:blank:] | tr -cd "1234567890.-")
 
 	echo $ussdresponce
+fi
 
-else
+if [[ $1 = "info" ]]; then
+	echo "get into get info"
 	# Get information about certain SIM-card
 	# key - from discovery ("2", "3" etc.)
-	echo -e "Action: Login\nUsername: $3\nSecret: $4\n\nAction: smscommand\nCommand: gsm show span $1\n\nAction: Logoff\n\n" | nc $2 5038
+	echo -e "Action: Login\nUsername: $4\nSecret: $5\n\nAction: smscommand\nCommand: gsm show span $2\n\nAction: Logoff\n\n" | nc $3 5038
 
 fi
