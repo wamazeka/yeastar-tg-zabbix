@@ -62,7 +62,7 @@ if [[ $1 = "balance" ]]; then
 	if [ ${#try_ucs} -ge 5 ]; then
 		ussdresponce=$(echo $ussdresponce | xxd -r -p | tr -d '\0')
 	fi
-
+	echo $ussdresponce
 	# Uppercase for minus catching, delete all spaces, change comma to dot
 	ussdresponce=$(echo $ussdresponce | tr [:lower:] [:upper:] | tr -d [:blank:] | tr , . | tr -d :)
 	# catch eng minus
@@ -70,6 +70,9 @@ if [[ $1 = "balance" ]]; then
 	ussdresponce=${ussdresponce//'P.'/''}
 	#ussdresponce=${ussdresponce//'МИНУС'/'-'} #russian non correct in proxmox , catch in template
 	#ussdresponce=${ussdresponce//'Р.'/''} #russian non correct in proxmox , catch in template
+
+	#Catch service symbols
+	ussdresponce=${ussdresponce//'0;0='/''}
 
 	# delete all spaces, all letters
 	# ussdresponce=$(echo $ussdresponce | tr -d [:blank:] | tr -cd "1234567890.-") # work in template
