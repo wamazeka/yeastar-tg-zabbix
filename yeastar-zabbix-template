@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.0</version>
-    <date>2022-05-30T13:13:14Z</date>
+    <date>2023-03-15T13:00:57Z</date>
     <groups>
         <group>
             <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
@@ -83,7 +83,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
+                                <key>yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -122,7 +122,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                                <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -150,7 +150,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                                <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -178,7 +178,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                                <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -214,7 +214,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                                <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -240,7 +240,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                                <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -277,7 +277,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                                <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -314,7 +314,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                                <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -350,7 +350,7 @@ For balance checking add {$TGAPI.IP} to host</description>
                                 </step>
                             </preprocessing>
                             <master_item>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                                <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             </master_item>
                             <tags>
                                 <tag>
@@ -376,11 +376,92 @@ For balance checking add {$TGAPI.IP} to host</description>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>2816c637167543e6b074337d692aaa92</uuid>
+                            <name>SIM{#NUM} - Balance</name>
+                            <type>EXTERNAL</type>
+                            <key>yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}]</key>
+                            <delay>8h</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>руб.</units>
+                            <preprocessing>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>Минус</parameter>
+                                        <parameter>-</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>р</parameter>
+                                        <parameter>.</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>REGEX</type>
+                                    <parameters>
+                                        <parameter>(-?\d+\.\d{1,2})|(-?\d+)</parameter>
+                                        <parameter>\0</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Balance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>6a287535db454c83a64c23322fa042c0</uuid>
+                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}])&lt;100</expression>
+                                    <name>Баланс ниже 100р SIM{#NUM} на {HOST.NAME}</name>
+                                    <opdata>{ITEM.LASTVALUE1}</opdata>
+                                    <priority>WARNING</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
+                                            <expression>last(/Yeastar TG/yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}])&lt;15</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>f708aef9fce14470a1f0df0ce7f6f559</uuid>
+                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}])&lt;0</expression>
+                                    <name>Баланс ниже нуля SIM{#NUM} на {HOST.NAME}</name>
+                                    <opdata>{ITEM.LASTVALUE1}</opdata>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>4b572f047caf4e889521374c23eb5e2f</uuid>
+                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}])&lt;15</expression>
+                                    <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
+                                    <opdata>{ITEM.LASTVALUE1}</opdata>
+                                    <priority>AVERAGE</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>Баланс ниже нуля SIM{#NUM} на {HOST.NAME}</name>
+                                            <expression>last(/Yeastar TG/yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}])&lt;0</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>67ae71a4ae2d4a9d9a98eb1201b6895f</uuid>
+                                    <expression>countunique(/Yeastar TG/yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}],15d)=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>countunique(/Yeastar TG/yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}],15d)&gt;1</recovery_expression>
+                                    <name>Не меняется баланс SIM{#NUM} на {HOST.NAME}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
                             <uuid>6dfdc91268bd4adcbd5c360e639e8ada</uuid>
                             <name>SIM{#NUM} - Summon external SMS</name>
                             <type>EXTERNAL</type>
-                            <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance2]</key>
-                            <delay>0;h22</delay>
+                            <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance2]</key>
+                            <delay>0;wd6h22</delay>
                             <history>30d</history>
                             <trends>0</trends>
                             <value_type>TEXT</value_type>
@@ -427,161 +508,10 @@ return resp</parameter>
                             </tags>
                         </item_prototype>
                         <item_prototype>
-                            <uuid>2816c637167543e6b074337d692aaa92</uuid>
-                            <name>SIM{#NUM} - Balance</name>
-                            <type>EXTERNAL</type>
-                            <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
-                            <delay>8h</delay>
-                            <value_type>FLOAT</value_type>
-                            <units>руб.</units>
-                            <preprocessing>
-                                <step>
-                                    <type>REGEX</type>
-                                    <parameters>
-                                        <parameter>SIM SMS Center Number: (.*)</parameter>
-                                        <parameter>\1</parameter>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>JAVASCRIPT</type>
-                                    <parameters>
-                                        <parameter>sms_center_num = value;
-
-balance_ussds = {
-	'+79037011111': '%23102%23',	// Beeline
-	'+79262909090': '%23100%23',	// Megafon
-	'+79219909090': '*100%23',	// Megafon2
-	'+79043490000': '%23105%23',	// Tele2
-	'+79168999100': '%23100%23',	// MTS
-        '+79112009993': '%23100%23'	// MTS2
-};
-
-user = '{$TGAPI.USER}';
-pass = '{$TGAPI.PASS}';
-port = '{#NUM}';
-ussd = balance_ussds[sms_center_num];
-
-url = 'http://{$TGAPI.IP}/cgi/WebCGI?1500102=account='+user+'&amp;password='+pass+'&amp;port='+port+'&amp;content='+ussd;
-Zabbix.Log(3, 'url'+ url);
-
-req = new CurlHttpRequest();
-resp = req.Get(url);
-
-return resp</parameter>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>STR_REPLACE</type>
-                                    <parameters>
-                                        <parameter><![CDATA[ ]]></parameter>
-                                        <parameter/>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>STR_REPLACE</type>
-                                    <parameters>
-                                        <parameter>Минус: </parameter>
-                                        <parameter>-</parameter>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>STR_REPLACE</type>
-                                    <parameters>
-                                        <parameter>Minus:</parameter>
-                                        <parameter>-</parameter>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>STR_REPLACE</type>
-                                    <parameters>
-                                        <parameter>р</parameter>
-                                        <parameter>r</parameter>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>STR_REPLACE</type>
-                                    <parameters>
-                                        <parameter>р</parameter>
-                                        <parameter>r</parameter>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>REGEX</type>
-                                    <parameters>
-                                        <parameter>-?\d+[\,\.]\d+|-?\d+r</parameter>
-                                        <parameter>\0</parameter>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>STR_REPLACE</type>
-                                    <parameters>
-                                        <parameter>,</parameter>
-                                        <parameter>.</parameter>
-                                    </parameters>
-                                </step>
-                                <step>
-                                    <type>STR_REPLACE</type>
-                                    <parameters>
-                                        <parameter>r</parameter>
-                                        <parameter/>
-                                    </parameters>
-                                </step>
-                            </preprocessing>
-                            <tags>
-                                <tag>
-                                    <tag>Application</tag>
-                                    <value>Balance</value>
-                                </tag>
-                            </tags>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <uuid>6a287535db454c83a64c23322fa042c0</uuid>
-                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;100</expression>
-                                    <name>Баланс ниже 100р SIM{#NUM} на {HOST.NAME}</name>
-                                    <opdata>{ITEM.LASTVALUE1}</opdata>
-                                    <priority>WARNING</priority>
-                                    <dependencies>
-                                        <dependency>
-                                            <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
-                                            <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;15</expression>
-                                        </dependency>
-                                    </dependencies>
-                                </trigger_prototype>
-                                <trigger_prototype>
-                                    <uuid>f708aef9fce14470a1f0df0ce7f6f559</uuid>
-                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;0</expression>
-                                    <name>Баланс ниже нуля SIM{#NUM} на {HOST.NAME}</name>
-                                    <opdata>{ITEM.LASTVALUE1}</opdata>
-                                    <priority>HIGH</priority>
-                                </trigger_prototype>
-                                <trigger_prototype>
-                                    <uuid>4b572f047caf4e889521374c23eb5e2f</uuid>
-                                    <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;15</expression>
-                                    <name>Баланс около нуля SIM{#NUM} на {HOST.NAME}</name>
-                                    <opdata>{ITEM.LASTVALUE1}</opdata>
-                                    <priority>AVERAGE</priority>
-                                    <dependencies>
-                                        <dependency>
-                                            <name>Баланс ниже нуля SIM{#NUM} на {HOST.NAME}</name>
-                                            <expression>last(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance])&lt;0</expression>
-                                        </dependency>
-                                    </dependencies>
-                                </trigger_prototype>
-                                <trigger_prototype>
-                                    <uuid>67ae71a4ae2d4a9d9a98eb1201b6895f</uuid>
-                                    <expression>countunique(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance],15d)=1</expression>
-                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
-                                    <recovery_expression>countunique(/Yeastar TG/yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance],15d)&gt;1</recovery_expression>
-                                    <name>Не меняется баланс SIM{#NUM} на {HOST.NAME}</name>
-                                    <priority>WARNING</priority>
-                                </trigger_prototype>
-                            </trigger_prototypes>
-                        </item_prototype>
-                        <item_prototype>
                             <uuid>ca2f1974f6fc4ff48c490453e073d963</uuid>
                             <name>SIM{#NUM} - Parsing</name>
                             <type>EXTERNAL</type>
-                            <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
+                            <key>yeastar-discovery.sh[info,{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS}]</key>
                             <delay>10m</delay>
                             <history>3h</history>
                             <trends>0</trends>
@@ -607,10 +537,6 @@ return resp</parameter>
                         <graph_prototype>
                             <uuid>1269dbfe69dc450e954a14710f5383e5</uuid>
                             <name>Баланс SIM{#NUM}</name>
-                            <ymin_item_1>
-                                <host>Yeastar TG</host>
-                                <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
-                            </ymin_item_1>
                             <graph_items>
                                 <graph_item>
                                     <sortorder>1</sortorder>
@@ -619,7 +545,7 @@ return resp</parameter>
                                     <calc_fnc>ALL</calc_fnc>
                                     <item>
                                         <host>Yeastar TG</host>
-                                        <key>yeastar-discovery.sh[{#ID},{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},balance]</key>
+                                        <key>yeastar-discovery.sh[balance,{HOST.CONN},{$TGAPI.USER},{$TGAPI.PASS},{#ID},{$TIMEOUT}]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -642,6 +568,12 @@ return resp</parameter>
                     </graph_prototypes>
                 </discovery_rule>
             </discovery_rules>
+            <tags>
+                <tag>
+                    <tag>{$TIMEOUT}</tag>
+                    <value>25</value>
+                </tag>
+            </tags>
         </template>
     </templates>
 </zabbix_export>
