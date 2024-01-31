@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>6.0</version>
-    <date>2023-03-15T13:00:57Z</date>
-    <groups>
-        <group>
+    <version>6.4</version>
+    <template_groups>
+        <template_group>
             <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
             <name>Templates</name>
-        </group>
-    </groups>
+        </template_group>
+    </template_groups>
     <templates>
         <template>
             <uuid>df29fa043f0d45b180d3263b6afdb0b3</uuid>
@@ -568,12 +567,75 @@ return resp</parameter>
                     </graph_prototypes>
                 </discovery_rule>
             </discovery_rules>
-            <tags>
-                <tag>
-                    <tag>{$TIMEOUT}</tag>
+            <macros>
+                <macro>
+                    <macro>{$TIMEOUT}</macro>
                     <value>25</value>
-                </tag>
-            </tags>
+                </macro>
+            </macros>
+            <dashboards>
+                <dashboard>
+                    <uuid>f536f7b08dce4ccc8d9e763849ceb063</uuid>
+                    <name>All Graphs</name>
+                    <pages>
+                        <page>
+                            <name>Signal levels</name>
+                            <widgets>
+                                <widget>
+                                    <type>graphprototype</type>
+                                    <width>24</width>
+                                    <height>13</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>rows</name>
+                                            <value>3</value>
+                                        </field>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show_legend</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH_PROTOTYPE</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Yeastar TG</host>
+                                                <name>Уровень сигнала SIM{#NUM}</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                            </widgets>
+                        </page>
+                        <page>
+                            <name>Balance levels</name>
+                            <widgets>
+                                <widget>
+                                    <type>graphprototype</type>
+                                    <width>24</width>
+                                    <height>13</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>rows</name>
+                                            <value>3</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH_PROTOTYPE</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Yeastar TG</host>
+                                                <name>Баланс SIM{#NUM}</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                            </widgets>
+                        </page>
+                    </pages>
+                </dashboard>
+            </dashboards>
         </template>
     </templates>
 </zabbix_export>
