@@ -492,8 +492,8 @@ ussd = balance_ussds[sms_center_num];
 url = 'http://{$TGAPI.IP}/cgi/WebCGI?1500102=account='+user+'&amp;password='+pass+'&amp;port='+port+'&amp;content='+ussd;
 Zabbix.Log(3, 'url'+ url);
 
-req = new CurlHttpRequest();
-resp = req.Get(url);
+req = new HttpRequest();
+resp = req.get(url);
 
 return resp</parameter>
                                     </parameters>
